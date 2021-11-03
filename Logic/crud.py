@@ -1,63 +1,58 @@
-from Domain.vanzare import creeaza_vanzare, get_id
+from Domain.vanzare2 import creaza_vanzare, getId
 
 
-def create(lst_vanzari, id_vanzare: int, titlu_carte, gen_carte, pret, tip_reducere):
-    """
-    Adauga o noua vanzare in lista
-    :param lst_vanzari: lista de vanzari
-    :param id_vanzare: id-ul vanzarii noi
-    :param titlu_carte: titlul cartii(vanzarii) noi
-    :param gen_carte: genul cartii(vanzarii) noi
-    :param pret: pretul cartii(vanzarii) noi
-    :param tip_reducere: tipul de reducere a cartii(vanzarii) noi
-    :return: o noua lista formata din lst_vanzari si noua vanzare adaugata
-    """
-    vanzare = creeaza_vanzare(id_vanzare, titlu_carte, gen_carte, pret, tip_reducere)
-    return lst_vanzari + [vanzare]
+def getById(id, lista):
+    '''
+    Returneaza o vanzare cu id-ul dat
+    :param id:id-ul cautat
+    :return:vanzarea cu id-ul cautat
+    '''
+    for v in lista:
+        if getId(v) == id:
+            return v
+    return None
 
+def adauga_vanzare(id, titlu, gen, pret, tip_reducere ,lista):
+    '''
+    Adauga o vanzare la o lista ce contine alte vanzari
+    :param id: id-ul cartii
+    :param titlu: titlul cartii
+    :param gen: genul cartii
+    :param pret: pretul cartii
+    :param tip_reducere: tipul reducerii clientului
+    :param lista: lista initiala de vanzari
+    :return: lista initiala + vanzarea adaugata
+    '''
+    vanzare = creaza_vanzare(id, titlu, gen, pret, tip_reducere)
+    return lista +[vanzare]
 
-def read(lst_vanzari, id_vanzare: int = None):
-    """
-    Citeste o vanzare din "baza de date"
-    :param lst_vanzari: lista de vanzari
-    :param id_vanzare: id-ul vanzarii dorite
-    :return: vanzare cu id-ul id_vanzare sau lista cu toate vanzarile daca id_vanzare=None
-    """
-    vanzare_cu_id = None
-    for vanzare in lst_vanzari:
-        if get_id(vanzare) == id_vanzare:
-            vanzare_cu_id = vanzare
-    if vanzare_cu_id:
-        return vanzare_cu_id
-    return lst_vanzari
+def sterge_vanzare(id, lista):
+    '''
+    Sterge o vanzare cu id-ul dat dintr-o lista
+    :param id: id-ul dat
+    :param lista: lista initiala
+    :return: lista fara elementul cu id-ul dat
+    '''
+    return [v for v in lista if getId(v) != id]
 
-
-def update(lst_vanzari, new_vanzare):
-    """
-    Actualizeaza o vanzare
-    :param lst_vanzari: lista de vanzari
-    :param new_vanzare: vanzarea care se va actualiza
-    :return: o lista cu vanzarea actualizata
-    """
-    new_vanzari = []
-    for vanzare in lst_vanzari:
-        if get_id(vanzare) != get_id(new_vanzare):
-            new_vanzari.append(vanzare)
+def modifica_vanzare(id, titlu, gen, pret, tip_reducere,lista):
+    '''
+    Modifica o vanzare cu id-ul dat
+    :param id: id-ul cautat
+    :param titlu: Noul titlu
+    :param gen: noul gen
+    :param pret: noul pret
+    :param tip_reducere: noul tip de reducere
+    :param lista: lista initiala
+    :return: noua lista
+    '''
+    listaNoua = []
+    for v in lista:
+        if getId(v) == id:
+            vanzare_noua = creaza_vanzare(id, titlu, gen, pret, tip_reducere)
+            listaNoua.append(vanzare_noua)
         else:
-            new_vanzari.append(new_vanzare)
-    return new_vanzari
+            listaNoua.append(v)
+    return listaNoua
 
 
-def delete(lst_vanzari, id_vanzare: int):
-    """
-    Sterge o vanzare din "baza de date"
-    :param lst_vanzari: lista de vanzari
-    :param id_vanzare: id-ul vanzarii date spre stergere
-    :return: o lista de vanzari fara vanzarea cu id-ul id_vanzare
-    """
-    new_vanzari = []
-    for vanzare in lst_vanzari:
-        if get_id(vanzare) != id_vanzare:
-            new_vanzari.append(vanzare)
-
-    return new_vanzari

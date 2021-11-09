@@ -1,58 +1,86 @@
-from Domain.vanzare2 import creaza_vanzare, getId
+from Domain.vanzare import creeaza_vanzare, get_id
 
 
-def getById(id, lista):
-    '''
-    Returneaza o vanzare cu id-ul dat
-    :param id:id-ul cautat
-    :return:vanzarea cu id-ul cautat
-    '''
-    for v in lista:
-        if getId(v) == id:
-            return v
-    return None
-
-def adauga_vanzare(id, titlu, gen, pret, tip_reducere ,lista):
-    '''
-    Adauga o vanzare la o lista ce contine alte vanzari
-    :param id: id-ul cartii
-    :param titlu: titlul cartii
-    :param gen: genul cartii
+def create(lst_vanzari,
+           id_vanzare, titlu, gen, pret, tip_client,
+           undo_list,redo_list):
+    """
+    Creeaza o lista de vanzari
+    :param redo_list: lista redo
+    :param undo_list: lista undo
+    :param lst_vanzari: lista de vanzari
+    :param id_vanzare: id-ul vanzarii
+    :param titlu: titlul cartii vandute
+    :param gen: genul cartii vandute
     :param pret: pretul cartii
-    :param tip_reducere: tipul reducerii clientului
-    :param lista: lista initiala de vanzari
-    :return: lista initiala + vanzarea adaugata
-    '''
-    vanzare = creaza_vanzare(id, titlu, gen, pret, tip_reducere)
-    return lista +[vanzare]
+    :param tip_client: tipul de client
+    :return: O noua lista formata din lst_vanzari si noua vanzare adaugata
+    """
 
-def sterge_vanzare(id, lista):
-    '''
-    Sterge o vanzare cu id-ul dat dintr-o lista
-    :param id: id-ul dat
-    :param lista: lista initiala
-    :return: lista fara elementul cu id-ul dat
-    '''
-    return [v for v in lista if getId(v) != id]
 
-def modifica_vanzare(id, titlu, gen, pret, tip_reducere,lista):
-    '''
-    Modifica o vanzare cu id-ul dat
-    :param id: id-ul cautat
-    :param titlu: Noul titlu
-    :param gen: noul gen
-    :param pret: noul pret
-    :param tip_reducere: noul tip de reducere
-    :param lista: lista initiala
-    :return: noua lista
-    '''
-    listaNoua = []
-    for v in lista:
-        if getId(v) == id:
-            vanzare_noua = creaza_vanzare(id, titlu, gen, pret, tip_reducere)
-            listaNoua.append(vanzare_noua)
+    vanzare = creeaza_vanzare(id_vanzare, titlu, gen, pret, tip_client)
+
+    undo_list.append(lst_vanzari)
+    redo_list.clear()
+
+    return lst_vanzari + [vanzare]
+
+
+def read(lst_vanzari, id_vanzare=None):
+    """
+    Citeste o vanzare din "baza de date"
+    :param lst_vanzari: lista de vanzari
+    :param id_vanzare: id-ul vanzarii
+    :return: vanzara cu id-ul id_vanzare sau lista cu toate vanzarile daca id_vanzare=None
+    """
+    vanzare_cu_id = None
+    for vanzare in lst_vanzari:
+        if get_id(vanzare) == id_vanzare:
+            vanzare_cu_id = vanzare
+    if vanzare_cu_id:
+        return vanzare_cu_id
+    return lst_vanzari
+
+
+def update(lst_vanzari, new_vanzare,
+           undo_list,redo_list):
+    """
+    Actualizeaza o vanzare
+    :param redo_list: lista redo
+    :param undo_list: lista undo
+    :param lst_vanzari: lista de vanzari
+    :param new_vanzare: vanzarea care se va actualiza - id-ul trebuie sa fie unul existent
+    :return: o lista cu vanzarea actualizata
+    """
+    new_vanzari = []
+    for vanzare in lst_vanzari:
+        if get_id(vanzare) != get_id(new_vanzare):
+            new_vanzari.append(vanzare)
         else:
-            listaNoua.append(v)
-    return listaNoua
+            new_vanzari.append(new_vanzare)
+
+    undo_list.append(lst_vanzari)
+    redo_list.clear()
+
+    return new_vanzari
 
 
+def delete(lst_vanzari, id_vanzare,
+           undo_list,redo_list):
+    """
+    Sterge o vanzare din lst
+    :param redo_list: lista undo
+    :param undo_list: lista redo
+    :param lst_vanzari: lista cu toate vanzarile
+    :param id_vanzare: id-ul vanzarii ce se va sterge
+    :return: o lista de vanzari fara vanzara cu id-ul id_vanzare
+    """
+    new_vanzari = []
+    for vanzare in lst_vanzari:
+        if get_id(vanzare) != id_vanzare:
+            new_vanzari.append(vanzare)
+
+    undo_list.append(lst_vanzari)
+    redo_list.clear()
+
+    return new_vanzari

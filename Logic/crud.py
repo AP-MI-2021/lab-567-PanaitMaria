@@ -1,86 +1,71 @@
-from Domain.vanzare import creeaza_vanzare, get_id
+from Domain.vanzare import creeazaVanzare, getId
 
 
-def create(lst_vanzari,
-           id_vanzare, titlu, gen, pret, tip_client,
-           undo_list,redo_list):
-    """
-    Creeaza o lista de vanzari
-    :param redo_list: lista redo
-    :param undo_list: lista undo
-    :param lst_vanzari: lista de vanzari
-    :param id_vanzare: id-ul vanzarii
-    :param titlu: titlul cartii vandute
-    :param gen: genul cartii vandute
-    :param pret: pretul cartii
-    :param tip_client: tipul de client
-    :return: O noua lista formata din lst_vanzari si noua vanzare adaugata
-    """
+def adaugVanzare(id, titlu, gen, pret, reducere, lista, undoList, redoList):
+    '''
+    adauga o vanzare intr-o lista
+    :param id: id-ul unei vanzari - string
+    :param titlu: titlul unei carti - string
+    :param gen: genul unei carti - string
+    :param pret: pretul unei carti - float
+    :param reducere: tip reducere client(none, silver sau gold) - string
+    :return: o lista care contine lista veche si vanzarea adaugata
+    '''
+    if getById(id, lista) is not None:
+        raise ValueError("Id-ul exista deja!")
+    if pret < 0:
+        raise ValueError("Pretul trebuie sa fie pozitiv!")
+    vanzare = creeazaVanzare(id, titlu, gen, pret, reducere)
+    undoList.append(lista)
+    redoList.clear()
+    return lista + [vanzare]
 
+def getById(id, lista):
+    '''
+    ia vanzarea cu id-ul dat dintr-o lista
+    :param id: id-ul vanzarii - string
+    :param lista: lista de vanzari
+    :return: vanzarea cu id-ul dat sau None daca nu exista in lista
+    '''
+    for vanzare in lista:
+        if getId(vanzare) == id:
+            return vanzare
+    return None
 
-    vanzare = creeaza_vanzare(id_vanzare, titlu, gen, pret, tip_client)
+def stergVanzare(id, lista, undoList, redoList):
+    '''
+    sterge o vanzare dintr-o lista
+    :param id: id-ul vanzarii - string
+    :param lista: lista de vanzari
+    :return: lista fara vanzarea cu id-ul dat
+    '''
+    if getById(id, lista) is None:
+        raise ValueError("Nu exista o vanzare cu id-ul dat!")
+    undoList.append(lista)
+    redoList.clear()
+    return [vanzare for vanzare in lista if getId(vanzare) != id]
 
-    undo_list.append(lst_vanzari)
-    redo_list.clear()
-
-    return lst_vanzari + [vanzare]
-
-
-def read(lst_vanzari, id_vanzare=None):
-    """
-    Citeste o vanzare din "baza de date"
-    :param lst_vanzari: lista de vanzari
-    :param id_vanzare: id-ul vanzarii
-    :return: vanzara cu id-ul id_vanzare sau lista cu toate vanzarile daca id_vanzare=None
-    """
-    vanzare_cu_id = None
-    for vanzare in lst_vanzari:
-        if get_id(vanzare) == id_vanzare:
-            vanzare_cu_id = vanzare
-    if vanzare_cu_id:
-        return vanzare_cu_id
-    return lst_vanzari
-
-
-def update(lst_vanzari, new_vanzare,
-           undo_list,redo_list):
-    """
-    Actualizeaza o vanzare
-    :param redo_list: lista redo
-    :param undo_list: lista undo
-    :param lst_vanzari: lista de vanzari
-    :param new_vanzare: vanzarea care se va actualiza - id-ul trebuie sa fie unul existent
-    :return: o lista cu vanzarea actualizata
-    """
-    new_vanzari = []
-    for vanzare in lst_vanzari:
-        if get_id(vanzare) != get_id(new_vanzare):
-            new_vanzari.append(vanzare)
+def modifVanzare(id, titlu, gen, pret, reducere, lista, undoList, redoList):
+    '''
+    modifica o vanzare dintr-o lista
+    :param id: id-ul unei vanzari - string
+    :param titlu: titlul unei carti - string
+    :param gen: genul unei carti - string
+    :param pret: pretul unei carti - float
+    :param reducere: tip reducere client(none, silver sau gold) - string
+    :return: lista cu vanzarea modificata
+    '''
+    if getById(id, lista) is None:
+        raise ValueError("Nu exista o vanzare cu id-ul dat!")
+    listaN =[]
+    for vanzare in lista:
+        if getId(vanzare) == id:
+            vanzareNoua = creeazaVanzare(id, titlu, gen, pret, reducere)
+            listaN.append(vanzareNoua)
         else:
-            new_vanzari.append(new_vanzare)
-
-    undo_list.append(lst_vanzari)
-    redo_list.clear()
-
-    return new_vanzari
+            listaN.append(vanzare)
+    undoList.append(lista)
+    redoList.clear()
+    return listaN
 
 
-def delete(lst_vanzari, id_vanzare,
-           undo_list,redo_list):
-    """
-    Sterge o vanzare din lst
-    :param redo_list: lista undo
-    :param undo_list: lista redo
-    :param lst_vanzari: lista cu toate vanzarile
-    :param id_vanzare: id-ul vanzarii ce se va sterge
-    :return: o lista de vanzari fara vanzara cu id-ul id_vanzare
-    """
-    new_vanzari = []
-    for vanzare in lst_vanzari:
-        if get_id(vanzare) != id_vanzare:
-            new_vanzari.append(vanzare)
-
-    undo_list.append(lst_vanzari)
-    redo_list.clear()
-
-    return new_vanzari

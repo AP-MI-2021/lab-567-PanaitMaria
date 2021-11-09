@@ -1,61 +1,81 @@
-def creeaza_vanzare(id_vanzare,titlu,gen,pret,tip_client):
-    """
-    Creeaza o vanzare.
-    :param id_vanzare: id-ul vanzarii, unic
-    :param titlu: titlul cartii vandute , nenul
-    :param gen: genul cartii , nenul
-    :param pret: pretul fara reducere ,nenul
-    :param tip_client: tipul clientului ( none/silver/gold ) , nenul
-    :return: o vanzare
-    """
-    return [
-        id_vanzare,
-        titlu,
-        gen,
-        pret,
-        tip_client,
+def creeazaVanzare(id, titlu, gen, pret, reducere):
+    '''
+    creeaza un dictionar ce retine o vanzare de carte
+    :param id: id-ul unei vanzari - string
+    :param titlu: titlul unei carti - string
+    :param gen: genul unei carti - string
+    :param pret: pretul unei carti - float
+    :param reducere: tip reducere client(none, silver sau gold) - string
+    :return: un dictionar ce retine o vanzare de carte
+    '''
+    '''
+    return {
+        "id": id,
+        "titlu": titlu,
+        "gen": gen,
+        "pret": pret,
+        "reducere": reducere
 
-    ]
+    }
+    '''
+    return [id, titlu, gen, pret, reducere]
 
-def get_id(vanzare):
-    """
-    Getter pentru id-ul vanzarii
-    :param vanzare: vanzare
-    :return: id-ul vanzarii date ca parametru
-    """
+def getId(vanzare):
+    '''
+    da id-ul vanzarii
+    :param vanzare: un dictionar de tip vanzare
+    :return: id-ul vanzarii - string
+    '''
+    #return vanzare["id"]
     return vanzare[0]
 
-def get_titlu(vanzare):
-    """
-    Getter pentru titlul cartii
-    :param vanzare:  vanzare
-    :return: titlul vanzarii date ca parametru
-    """
+
+def getTitlu(vanzare):
+    '''
+    da titlul cartii
+    :param vanzare: un dictionar de tip vanzare
+    :return: titlul cartii - string
+    '''
+    #return vanzare["titlu"]
     return vanzare[1]
 
-def get_gen(vanzare):
-    """
-    Getter pentru genul cartii
-    :param vanzare:  vanzare
-    :return: genul vanzarii date ca parametru
-    """
+def getGen(vanzare):
+    '''
+    da genul cartii
+    :param vanzare: un dictionar de tip vanzare
+    :return: genul cartii - string
+    '''
+    #return vanzare["gen"]
     return vanzare[2]
 
-def get_pret(vanzare):
-    """
-    Getter pentru pretul cartii
-    :param vanzare:  vanzare
-    :return: pretul vanzarii date ca parametru
-    """
+def getPret(vanzare):
+    '''
+    da pretul cartii
+    :param vanzare: un dictionar de tip vanzare
+    :return: pretul cartii - float
+    '''
+    #return vanzare["pret"]
     return vanzare[3]
 
-def get_reducere(vanzare):
-    """
-    Getter pentru discount-ul vanzarii
-    :param vanzare:  vanzare
-    :return: tipul reducerii vanzarii date ca parametru
-    """
+def getReducere(vanzare):
+    '''
+    da tipul de reducere - none, silver sau gold
+    :param vanzare: un dictionar de tip vanzare
+    :return: tipul de reducere al unui client
+    '''
+    #return vanzare["reducere"]
     return vanzare[4]
 
-def get_str(vanzare):
-    return f'Vanzarea cu id-ul {get_id(vanzare)} a cartii {get_titlu(vanzare)} de genul {get_gen(vanzare)} a fost realizata cu pretul de {get_pret(vanzare)} catre un client {get_reducere(vanzare)}'
+def toString(vanzare):
+    '''
+    scrie dictionarul sub forma de string
+    :param vanzare:un dictionar de tip vanzare
+    :return: disctionarul ca string
+    '''
+    return "id: {}, titlu: {}, gen: {}, pret: {}, reducere: {}".format(
+        getId(vanzare),
+        getTitlu(vanzare),
+        getGen(vanzare),
+        getPret(vanzare),
+        getReducere(vanzare)
+    )

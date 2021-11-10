@@ -1,4 +1,4 @@
-from Logic.CRUD import adaugVanzare
+from Logic.crud import adaugVanzare
 from Tests.allTests import runAllTests
 from UI.command_line_console import runMenu2
 from UI.console import runMenu

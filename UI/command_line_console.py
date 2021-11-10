@@ -1,4 +1,4 @@
-from Logic.CRUD import adaugVanzare, stergVanzare
+from Logic.crud import adaugVanzare, stergVanzare
 from UI.console import showAll
 
 

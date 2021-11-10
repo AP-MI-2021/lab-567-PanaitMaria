@@ -1,5 +1,5 @@
 from Domain.vanzare import getId
-from Logic.CRUD import adaugVanzare, getById
+from Logic.crud import adaugVanzare, getById
 from UI.console import functieUndo, functieRedo
 
 

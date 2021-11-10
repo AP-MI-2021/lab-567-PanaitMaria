@@ -1,5 +1,5 @@
 from Domain.vanzare import getPret, getGen, getId
-from Logic.CRUD import adaugVanzare, getById
+from Logic.crud import adaugVanzare, getById
 from Logic.functionalitati import aplicDiscount, modifGenDupaTitlu, pretMinimGen, ordonareListaDupaPret, \
     afisTitluriDupaGen
 

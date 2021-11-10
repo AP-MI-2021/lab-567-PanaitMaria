@@ -3,7 +3,11 @@ from UI.console import showAll
 
 
 def oneLine(lista):
+    undoList =[]
+    redoList = []
     while True:
+        undoList = []
+        redoList = []
         lineCom = input('Dati comenzile: ')
         lineCom = lineCom.split(';')
         for l in lineCom:
@@ -16,7 +20,7 @@ def oneLine(lista):
                         gen = l[3]
                         pret = float(l[4])
                         reducere = l[5]
-                        lista = adaugVanzare(id, titlu, gen, pret, reducere, lista)
+                        lista = adaugVanzare(id, titlu, gen, pret, reducere, lista, undoList, redoList)
                     except ValueError as ve:
                         print(f'Eroare: {ve}')
                 else:
@@ -27,7 +31,7 @@ def oneLine(lista):
                 if len(l) == 2:
                     try:
                         id = l[1]
-                        lista = stergVanzare(id, lista)
+                        lista = stergVanzare(id, lista, undoList,redoList)
                     except ValueError as ve:
                         print(f'Eroare: {ve}')
                 else:

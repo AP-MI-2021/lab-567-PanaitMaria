@@ -9,28 +9,22 @@ def creaza_vanzare(id, titlu, gen, pret, tip_reducere):
     :param tip_reducere: string
     :return: o vanzare
     '''
-    return{
-        'id':id,
-        'titlu':titlu,
-        'gen':gen,
-        'pret':pret,
-        'tip_reducere':tip_reducere
-    }
+    return [id, titlu, gen, pret, tip_reducere]
 
 def getId(vanzare):
-    return vanzare['id']
+    return vanzare[0]
 
 def getTitlu(vanzare):
-    return vanzare['titlu']
+    return vanzare[1]
 
 def getGen(vanzare):
-    return vanzare['gen']
+    return vanzare[2]
 
 def getPret(vanzare):
-    return vanzare['pret']
+    return vanzare[3]
 
 def getReducere(vanzare):
-    return vanzare['tip_reducere']
+    return vanzare[4]
 
 def ToString(vanzare):
     return f"ID: {getId(vanzare)}, Titlu: {getTitlu(vanzare)}, " \

@@ -1,58 +1,68 @@
-from Domain.vanzare2 import creaza_vanzare, getId
+from domain.vanzari2 import getNewSale, getId
+
+
+def addSale(id, titlu, gen, pret, tip_red_cl, lista):
+    """
+    Adauga o vanzare intr-o lista
+    :param id: string
+    :param titlu: string
+    :param gen: string
+    :param pret: float
+    :param tip_red_cl: string
+    :param lista: lista de vanzari
+    :return: o lista continand vechile vanzari si noua vanzare
+    """
+    if getById(id, lista) is not None:
+        raise ValueError("Id-ul exista deja! ")
+    sale = getNewSale(id, titlu, gen, pret, tip_red_cl)
+    return lista + [sale]
 
 
 def getById(id, lista):
-    '''
-    Returneaza o vanzare cu id-ul dat
-    :param id:id-ul cautat
-    :return:vanzarea cu id-ul cautat
-    '''
-    for v in lista:
-        if getId(v) == id:
-            return v
+    """
+    Da vanzarea din lista cu un id dat
+    :param id: string
+    :param lista: lista de vanzari
+    :return: vanzarea cu id-ul dat sau None daca nu exista
+    """
+    for sale in lista:
+        if getId(sale) == id:
+            return sale
     return None
 
-def adauga_vanzare(id, titlu, gen, pret, tip_reducere ,lista):
-    '''
-    Adauga o vanzare la o lista ce contine alte vanzari
-    :param id: id-ul cartii
+
+def deleteSale(id, lista):
+    """
+    Sterge vanzarea cu id-ul dat dintr-o lista
+    :param id: id-ul vanzarii care se va sterge
+    :param lista: lista de vanzari
+    :return: o lista de vanzari fara vanzarea cu id-ul dat
+    """
+    if getById(id, lista) is None:
+        raise ValueError("Id-ul nu exista!")
+
+    return [sale for sale in lista if getId(sale) != id]
+
+
+def modifySale(id, titlu, gen, pret, tip_red_cl, lista):
+    """
+    Modifica vanzarea cu id-ul dat
+    :param id: id-ul vanzarii
     :param titlu: titlul cartii
     :param gen: genul cartii
     :param pret: pretul cartii
-    :param tip_reducere: tipul reducerii clientului
-    :param lista: lista initiala de vanzari
-    :return: lista initiala + vanzarea adaugata
-    '''
-    vanzare = creaza_vanzare(id, titlu, gen, pret, tip_reducere)
-    return lista +[vanzare]
+    :param tip_red_cl: tipul de reducere al clientului
+    :param lista: o lista de vanzari
+    :return: lista modificata
+    """
+    if getById(id, lista) is None:
+        raise ValueError("Id-ul nu exista! ")
 
-def sterge_vanzare(id, lista):
-    '''
-    Sterge o vanzare cu id-ul dat dintr-o lista
-    :param id: id-ul dat
-    :param lista: lista initiala
-    :return: lista fara elementul cu id-ul dat
-    '''
-    return [v for v in lista if getId(v) != id]
-
-def modifica_vanzare(id, titlu, gen, pret, tip_reducere,lista):
-    '''
-    Modifica o vanzare cu id-ul dat
-    :param id: id-ul cautat
-    :param titlu: Noul titlu
-    :param gen: noul gen
-    :param pret: noul pret
-    :param tip_reducere: noul tip de reducere
-    :param lista: lista initiala
-    :return: noua lista
-    '''
     listaNoua = []
-    for v in lista:
-        if getId(v) == id:
-            vanzare_noua = creaza_vanzare(id, titlu, gen, pret, tip_reducere)
-            listaNoua.append(vanzare_noua)
+    for sale in lista:
+        if getId(sale) == id:
+            newSale = getNewSale(id, titlu, gen, pret, tip_red_cl)
+            listaNoua.append(newSale)
         else:
-            listaNoua.append(v)
+            listaNoua.append(sale)
     return listaNoua
-
-
